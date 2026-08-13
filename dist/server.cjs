@@ -201,7 +201,7 @@ var DEFAULT_ADMIN = {
 };
 var prisma = new import_client.PrismaClient();
 var app = (0, import_express.default)();
-var PORT = 3e3;
+var PORT = Number(process.env.PORT) || 3e3;
 app.use((0, import_cors.default)());
 app.use(import_express.default.json({ limit: "10mb" }));
 function generateShortCode() {
@@ -720,10 +720,16 @@ app.post("/api/submissions/:id/send-email", async (req, res) => {
   }
 });
 async function start() {
-  await initSeed();
-  app.listen(PORT, "0.0.0.0", () => {
-    console.log(`\u{1F680} Backend running on http://localhost:${PORT}`);
-  });
+  try {
+    await prisma.$connect();
+    await initSeed();
+    app.listen(PORT, "0.0.0.0", () => {
+      console.log(`\u{1F680} Backend running on http://0.0.0.0:${PORT}`);
+    });
+  } catch (error) {
+    console.error("\u274C Failed to start backend:", error);
+    process.exit(1);
+  }
 }
 start();
 //# sourceMappingURL=server.cjs.map

@@ -16,7 +16,7 @@ const DEFAULT_ADMIN = {
 
 const prisma = new PrismaClient();
 const app = express();
-const PORT = 3000;
+const PORT = Number(process.env.PORT) || 3000;
 
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
@@ -616,11 +616,17 @@ app.post('/api/submissions/:id/send-email', async (req, res) => {
 
 // Start Express Server
 async function start() {
-  await initSeed();
+  try {
+    await prisma.$connect();
+    await initSeed();
 
-  app.listen(PORT, '0.0.0.0', () => {
-    console.log(`🚀 Backend running on http://localhost:${PORT}`);
-  });
+    app.listen(PORT, '0.0.0.0', () => {
+      console.log(`🚀 Backend running on http://0.0.0.0:${PORT}`);
+    });
+  } catch (error) {
+    console.error('❌ Failed to start backend:', error);
+    process.exit(1);
+  }
 }
 
 start();
