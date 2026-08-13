@@ -14,6 +14,7 @@ const DEFAULT_ADMIN = {
   name: 'Administrador Fórmula Plus',
 };
 
+
 const prisma = new PrismaClient();
 const app = express();
 const PORT = Number(process.env.PORT) || 3000;
