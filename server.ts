@@ -3,7 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import { PrismaClient } from '@prisma/client';
 import nodemailer from 'nodemailer';
-import { FORMULA_PLUS_QUESTIONNAIRE } from '../frontend/src/data/questionnaireTemplate.ts';
+import { FORMULA_PLUS_QUESTIONNAIRE } from './src/data/questionnaireTemplate.js';
 
 dotenv.config();
 
