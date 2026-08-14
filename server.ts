@@ -107,9 +107,27 @@ async function initSeed() {
 // ==================== API ROUTES ====================
 
 // Healthcheck
-app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+app.get('/api/health', async (req, res) => {
+  try {
+    // Ping no banco de dados para evitar que o Supabase durma
+    await prisma.$queryRaw`SELECT 1`;
+    res.json({ status: 'ok', db: 'connected', timestamp: new Date().toISOString() });
+  } catch (error) {
+    console.error('Database ping failed:', error);
+    res.status(500).json({ status: 'error', db: 'disconnected', timestamp: new Date().toISOString() });
+  }
 });
+
+// Tarefa em segundo plano: pingar o banco de dados a cada 10 minutos (600000 ms)
+// para ajudar a manter o Supabase ativo enquanto o servidor (Render) estiver rodando.
+setInterval(async () => {
+  try {
+    await prisma.$queryRaw`SELECT 1`;
+    console.log('Pinged database to keep it awake');
+  } catch (err) {
+    console.error('Database keep-alive ping failed:', err);
+  }
+}, 10 * 60 * 1000);
 
 // Admin Auth
 app.post('/api/auth/login', async (req, res) => {
