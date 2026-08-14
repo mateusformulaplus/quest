@@ -1,0 +1,6 @@
+{
+  "name": "Fórmula Plus - Questionário de Pré-Entrevista",
+  "description": "Sistema de gestão de questionários de pré-entrevista para candidatos da Fórmula Plus Farmácia de Manipulação com dashboard ADM, links públicos, envio por e-mail, avaliação de RH e exportação em PDF.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
